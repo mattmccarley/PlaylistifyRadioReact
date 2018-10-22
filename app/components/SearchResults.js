@@ -8,20 +8,23 @@ class TrackResults extends React.Component {
   render() {
     return (
       <div>
-        <p className="search-results__heading">Tracks</p>
-        <ul>
-          {this.props.searchResults &&
-          this.props.searchResults.tracks.items.map(track => {
-            return (
-              <li
-                key={track.id}
-                onClick={this.props.handleSeedSelect.bind(null, track, 'tracks')}
-              >
-                <span className="track-results__track-name">{track.name}</span> by <span className="track-results__track-artist">{track.artists[0].name}</span>
-              </li>
-            )
-          })}
-        </ul>
+        {this.props.tracks &&
+        <div>
+          <h3>Tracks</h3>
+          <ul>
+            {this.props.tracks.items.map(track => {
+              return (
+                <li
+                  key={track.id}
+                  onClick={this.props.handleSeedSelect.bind(null, track, 'tracks')}
+                >
+                  <span className="track-results__track-name">{track.name}</span> by <span className="track-results__track-artist">{track.artists[0].name}</span>
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+        }
       </div>
     )
   }
@@ -31,31 +34,34 @@ class ArtistResults extends React.Component {
   constructor(props) {
     super(props);
   }
+
   render() {
     return (
       <div>
-        <p className="search-results__heading">Artists</p>
-        <ul>
-        {this.props.searchResults &&
-        this.props.searchResults.artists.items.map(artist => {
-          return (
-            <li
-              className="artist-results__artist-item"
-              key={artist.id}
-              onClick={this.props.handleSeedSelect.bind(null, artist, 'artists')}
-            >
-              {artist.images[artist.images.length - 1] &&
-                <img 
-                  className="artist-results__artist-image"
-                  src={artist.images[artist.images.length - 1].url}
-                  alt=""
-                />
-              }
-              <span>{artist.name}</span>
-            </li>
-          )
-        })}
-        </ul>
+        {this.props.artists &&
+        <div>
+          <h3>Artists</h3>
+          <ul>
+            {this.props.artists.items.map(artist => {
+              return (
+                <li
+                  key={artist.id}
+                  onClick={this.props.handleSeedSelect.bind(null, artist, 'artists')}
+                >
+                  {artist.images.length > 0 &&
+                  <img
+                    className='artist-results__artist-image'
+                    src={artist.images[artist.images.length - 1].url}
+                    alt={artist.name}
+                  />
+                  }
+                  {artist.name}
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+        }
       </div>
     )
   }
@@ -68,19 +74,19 @@ class AlbumsResults extends React.Component {
   render() {
     return (
       <div>
-        <p className="search-results__heading">Albums</p>
+        <h3>Albums</h3>
         <ul>
-        {this.props.searchResults &&
-        this.props.searchResults.albums.items.map(album => {
+        {this.props.albums &&
+        this.props.albums.items.map(album => {
           return (
             <li
               key={album.id}
               onClick={this.props.handleSeedSelect.bind(null, album, 'albums')}
             >
-              {album.images[album.images.length - 2] &&
+              {album.images[album.images.length - 1] &&
                 <img 
                   className="album-results__album-image"
-                  src={album.images[album.images.length - 2].url}
+                  src={album.images[album.images.length - 1].url}
                   alt=""
                 />
               }
@@ -103,17 +109,17 @@ class PlaylistResults extends React.Component {
       <div>
         <p className="search-results__heading">Playlists</p>
         <ul>
-        {this.props.searchResults &&
-        this.props.searchResults.playlists.items.map(playlist => {
+        {this.props.playlists &&
+        this.props.playlists.items.map(playlist => {
           return (
             <li
               key={playlist.id}
               onClick={this.props.handleSeedSelect.bind(null, playlist, 'playlists')}
             >
-              {playlist.images[0] &&
+              {playlist.images.length > 0 &&
                 <img 
-                  className=""
-                  src={playlist.images[0].url}
+                  className='playlist-results__playlist-image'
+                  src={playlist.images[playlist.images.length - 1].url}
                   alt=""
                 />
               }
@@ -133,11 +139,15 @@ class SearchResults extends React.Component {
   }
   render() {
     return (
-      <div>
-        <TrackResults searchResults={this.props.searchResults} handleSeedSelect={this.props.handleSeedSelect}></TrackResults>
-        <ArtistResults searchResults={this.props.searchResults} handleSeedSelect={this.props.handleSeedSelect}></ArtistResults>
-        <AlbumsResults searchResults={this.props.searchResults} handleSeedSelect={this.props.handleSeedSelect}></AlbumsResults>
-        <PlaylistResults searchResults={this.props.searchResults} handleSeedSelect={this.props.handleSeedSelect}></PlaylistResults>
+      <div className='row'>
+        {this.props.searchResults &&
+        <div className='row'>
+          <TrackResults tracks={this.props.searchResults.tracks} handleSeedSelect={this.props.handleSeedSelect}></TrackResults>
+          <ArtistResults artists={this.props.searchResults.artists} handleSeedSelect={this.props.handleSeedSelect}></ArtistResults>
+          <AlbumsResults albums={this.props.searchResults.albums} handleSeedSelect={this.props.handleSeedSelect}></AlbumsResults>
+          <PlaylistResults playlists={this.props.searchResults.playlists} handleSeedSelect={this.props.handleSeedSelect}></PlaylistResults>
+        </div>
+        }
       </div>
     )
   }

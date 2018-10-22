@@ -37,7 +37,8 @@ class Search extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className='search'>
+        <h2>Search</h2>
         <input type="text" onChange={this.handleChange}/>
         <SearchResults
           searchResults={this.state.searchResults}

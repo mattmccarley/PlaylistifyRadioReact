@@ -2,8 +2,32 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
+ul {
+  margin: 0;
+  padding: 0;
+}
+
 li {
   list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.user {
+  background-color: goldenrod;
+}
+
+.search {
+  background-color: pink;
+}
+
+.seeds {
+  background-color: lightskyblue;
 }
 
 .search-results__heading {
@@ -29,5 +53,11 @@ li {
   height: 64px;
   width: 64px;
   border-radius: 50%;
+  margin-right: 10px;
+}
+
+.playlist-results__playlist-image {
+  height: 64px;
+  width: 64px;
   margin-right: 10px;
 }

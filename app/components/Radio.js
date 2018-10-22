@@ -3,6 +3,7 @@ var PropTypes = require('prop-types');
 var api = require('../utils/api');
 var User = require('./User');
 var Search = require('./Search');
+var Seeds = require('./Seeds');
 
 
 class Radio extends React.Component {
@@ -76,6 +77,7 @@ class Radio extends React.Component {
             loggedIn={this.state.loggedIn}>
           </User>
         }
+        <Seeds seeds={this.state.seeds}></Seeds>
         <Search token={this.state.token} handleSeedSelect={this.handleSeedSelect}></Search>
       </div>
     )
