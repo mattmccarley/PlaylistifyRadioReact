@@ -41,6 +41,7 @@ class Search extends React.Component {
         <input type="text" onChange={this.handleChange}/>
         <SearchResults
           searchResults={this.state.searchResults}
+          handleSeedSelect={this.props.handleSeedSelect}
         ></SearchResults>
       </div>
     )

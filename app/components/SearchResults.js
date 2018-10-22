@@ -4,6 +4,7 @@ class TrackResults extends React.Component {
   constructor(props) {
     super(props);
   }
+
   render() {
     return (
       <div>
@@ -12,7 +13,10 @@ class TrackResults extends React.Component {
           {this.props.searchResults &&
           this.props.searchResults.tracks.items.map(track => {
             return (
-              <li key={track.id}>
+              <li
+                key={track.id}
+                onClick={this.props.handleSeedSelect.bind(null, track, 'tracks')}
+              >
                 <span className="track-results__track-name">{track.name}</span> by <span className="track-results__track-artist">{track.artists[0].name}</span>
               </li>
             )
@@ -38,6 +42,7 @@ class ArtistResults extends React.Component {
             <li
               className="artist-results__artist-item"
               key={artist.id}
+              onClick={this.props.handleSeedSelect.bind(null, artist, 'artists')}
             >
               {artist.images[artist.images.length - 1] &&
                 <img 
@@ -70,6 +75,7 @@ class AlbumsResults extends React.Component {
           return (
             <li
               key={album.id}
+              onClick={this.props.handleSeedSelect.bind(null, album, 'albums')}
             >
               {album.images[album.images.length - 2] &&
                 <img 
@@ -102,6 +108,7 @@ class PlaylistResults extends React.Component {
           return (
             <li
               key={playlist.id}
+              onClick={this.props.handleSeedSelect.bind(null, playlist, 'playlists')}
             >
               {playlist.images[0] &&
                 <img 
@@ -127,10 +134,10 @@ class SearchResults extends React.Component {
   render() {
     return (
       <div>
-        <TrackResults searchResults={this.props.searchResults}></TrackResults>
-        <ArtistResults searchResults={this.props.searchResults}></ArtistResults>
-        <AlbumsResults searchResults={this.props.searchResults}></AlbumsResults>
-        <PlaylistResults searchResults={this.props.searchResults}></PlaylistResults>
+        <TrackResults searchResults={this.props.searchResults} handleSeedSelect={this.props.handleSeedSelect}></TrackResults>
+        <ArtistResults searchResults={this.props.searchResults} handleSeedSelect={this.props.handleSeedSelect}></ArtistResults>
+        <AlbumsResults searchResults={this.props.searchResults} handleSeedSelect={this.props.handleSeedSelect}></AlbumsResults>
+        <PlaylistResults searchResults={this.props.searchResults} handleSeedSelect={this.props.handleSeedSelect}></PlaylistResults>
       </div>
     )
   }

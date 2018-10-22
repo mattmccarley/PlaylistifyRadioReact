@@ -14,8 +14,16 @@ class Radio extends React.Component {
     this.state = {
       loggedIn: token ? true : false,
       token: token,
-      userData: null
+      userData: null,
+      seeds: {
+        tracks: [],
+        artists: [],
+        albums: [],
+        playlists: []
+      }
     }
+
+    this.handleSeedSelect = this.handleSeedSelect.bind(this);
   }
 
   componentDidMount() {
@@ -44,6 +52,21 @@ class Radio extends React.Component {
     }.bind(this));
   }
 
+  handleSeedSelect(seed, seedType) {
+    var newSeeds = this.state.seeds[seedType];
+    if (!newSeeds.includes(seed)) {
+      newSeeds.push(seed);
+    }
+
+    var newState = {
+      seeds: null
+    }[seedType] = newSeeds;
+
+    this.setState(function () {
+      return newState;
+    });
+  }
+
   render() {
     return (
       <div>
@@ -53,7 +76,7 @@ class Radio extends React.Component {
             loggedIn={this.state.loggedIn}>
           </User>
         }
-        <Search token={this.state.token}></Search>
+        <Search token={this.state.token} handleSeedSelect={this.handleSeedSelect}></Search>
       </div>
     )
   }
