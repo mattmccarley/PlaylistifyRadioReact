@@ -34,6 +34,10 @@ li {
   background-color: lightskyblue;
 }
 
+.player {
+  background-color: lightseagreen;
+}
+
 .search-results__heading {
   font-size: 20px;
   font-weight: bold;

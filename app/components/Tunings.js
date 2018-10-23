@@ -3,8 +3,6 @@ var React = require('react');
 class Tunings extends React.Component {
   constructor(props) {
     super(props);
-
-    console.log(props.tunings);
   }
 
   render() {

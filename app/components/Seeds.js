@@ -104,10 +104,6 @@ class Seeds extends React.Component {
   constructor(props) {
     super(props);
   }
-
-  componentDidMount() {
-    console.log(this.props);
-  }
   render() {
     return (
       <div className='seeds'>
@@ -115,8 +111,8 @@ class Seeds extends React.Component {
         <div className='row'>
           <TrackSeeds tracks={this.props.seeds.tracks}></TrackSeeds>
           <ArtistSeeds artists={this.props.seeds.artists}></ArtistSeeds>
-          <AlbumSeeds albums={this.props.seeds.albums}></AlbumSeeds>
-          <PlaylistSeeds playlists={this.props.seeds.playlists}></PlaylistSeeds>
+          {/* <AlbumSeeds albums={this.props.seeds.albums}></AlbumSeeds> */}
+          {/* <PlaylistSeeds playlists={this.props.seeds.playlists}></PlaylistSeeds> */}
         </div>
       </div>
     )

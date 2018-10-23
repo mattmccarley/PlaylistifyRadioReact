@@ -144,8 +144,8 @@ class SearchResults extends React.Component {
         <div className='row'>
           <TrackResults tracks={this.props.searchResults.tracks} handleSeedSelect={this.props.handleSeedSelect}></TrackResults>
           <ArtistResults artists={this.props.searchResults.artists} handleSeedSelect={this.props.handleSeedSelect}></ArtistResults>
-          <AlbumsResults albums={this.props.searchResults.albums} handleSeedSelect={this.props.handleSeedSelect}></AlbumsResults>
-          <PlaylistResults playlists={this.props.searchResults.playlists} handleSeedSelect={this.props.handleSeedSelect}></PlaylistResults>
+          {/* <AlbumsResults albums={this.props.searchResults.albums} handleSeedSelect={this.props.handleSeedSelect}></AlbumsResults> */}
+          {/* <PlaylistResults playlists={this.props.searchResults.playlists} handleSeedSelect={this.props.handleSeedSelect}></PlaylistResults> */}
         </div>
         }
       </div>

@@ -5,6 +5,7 @@ var User = require('./User');
 var Tunings = require('./Tunings');
 var Search = require('./Search');
 var Seeds = require('./Seeds');
+var Player = require('./Player');
 
 
 class Radio extends React.Component {
@@ -31,15 +32,24 @@ class Radio extends React.Component {
         loudness: 0.5,
         popularity: 0.5,
         valence: 0.5
+      },
+      player: {
+        tracks: [],
+        devices: [],
+        playlist: null
       }
     }
 
     this.handleSeedSelect = this.handleSeedSelect.bind(this);
     this.handleTuningAdjustment = this.handleTuningAdjustment.bind(this);
+    this.getTracks = this.getTracks.bind(this);
+    this.sendTracksToActivePlayer = this.sendTracksToActivePlayer.bind(this);
   }
 
   componentDidMount() {
     this.getUser();
+    this.getDevices();
+    this.createPlaylist();
   }
 
   getHashParams() {
@@ -64,19 +74,74 @@ class Radio extends React.Component {
     }.bind(this));
   }
 
+  getDevices() {
+    var token = this.state.token;
+    api.getDevices(token)
+      .then(function(deviceData) {
+        var newState = this.state;
+        newState.player.devices = deviceData.devices;
+        this.setState(function () {
+          return newState;
+        });
+      }.bind(this));
+  }
+
+  getUserPlaylists() {
+    var token = this.state.token;
+    api.getUserPlaylists(token)
+      .then(function(data) {
+        var newState = this.state;
+        newState.userPlaylists = data;
+        this.setState(function () {
+          return newState;
+        });
+      }.bind(this));
+  }
+
+  createPlaylist() {
+    var token = this.state.token;
+    api.getUserPlaylists(token)
+      .then(function(data) {
+        var myPlaylist = data.items.filter(playlist => {
+          return playlist.name === 'PlaylistifyRadio :: Queue';
+        });
+
+        if (myPlaylist.length === 0) {
+          var token = this.state.token;
+          api.createPlaylist(token)
+            .then(function(data) {
+              var newState = this.state;
+              newState.player.playlist = data;
+              this.setState(function () {
+                return newState;
+              })
+            }.bind(this));
+        } else {
+          var newState = this.state;
+          newState.player.playlist = myPlaylist[0];
+          this.setState(function () {
+            return newState;
+          });
+        }
+    }.bind(this));
+  }
+  
+
   handleSeedSelect(seed, seedType) {
+    var newState = {
+      seeds: this.state.seeds
+    };
     var newSeeds = this.state.seeds[seedType];
+
     if (!newSeeds.includes(seed)) {
       newSeeds.push(seed);
     }
 
-    var newState = {
-      seeds: null
-    }[seedType] = newSeeds;
+    newState.seeds[seedType] = newSeeds;
 
     this.setState(function () {
       return newState;
-    });
+    }, this.getTracks);
   }
 
   handleTuningAdjustment(event) {
@@ -85,7 +150,28 @@ class Radio extends React.Component {
 
     this.setState(function () {
       return newTunings;
-    });
+    }, this.getTracks);
+  }
+
+  getTracks() {
+    var token = this.state.token;
+    var seeds = this.state.seeds;
+    var tunings = this.state.tunings;
+    api.getRecommendations(token, seeds, tunings)
+    .then(function (recommendationsData) {
+      var newState = this.state;
+      newState.player.tracks = recommendationsData.tracks;
+      this.setState(function () {
+        return newState;
+      });
+
+    }.bind(this));
+  }
+
+  sendTracksToActivePlayer() {
+    var token = this.state.token;
+    var tracks = this.state.player.tracks;
+    api.play(token, tracks);
   }
 
   render() {
@@ -97,6 +183,11 @@ class Radio extends React.Component {
             loggedIn={this.state.loggedIn}>
           </User>
         }
+        <Player
+          tracks={this.state.player.tracks}
+          devices={this.state.player.devices}
+          sendTracksToActivePlayer={this.sendTracksToActivePlayer}
+        ></Player>
         <Tunings tunings={this.state.tunings} handleTuningAdjustment={this.handleTuningAdjustment}></Tunings>
         <Seeds seeds={this.state.seeds}></Seeds>
         <Search token={this.state.token} handleSeedSelect={this.handleSeedSelect}></Search>
