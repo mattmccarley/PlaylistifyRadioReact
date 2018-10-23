@@ -2,6 +2,7 @@ var React = require('react');
 var PropTypes = require('prop-types');
 var api = require('../utils/api');
 var User = require('./User');
+var Tunings = require('./Tunings');
 var Search = require('./Search');
 var Seeds = require('./Seeds');
 
@@ -21,10 +22,20 @@ class Radio extends React.Component {
         artists: [],
         albums: [],
         playlists: []
+      },
+      tunings: {
+        acousticness: undefined,
+        danceability: undefined,
+        energy: undefined,
+        instrumentalness: undefined,
+        loudness: undefined,
+        popularity: undefined,
+        valence: undefined
       }
     }
 
     this.handleSeedSelect = this.handleSeedSelect.bind(this);
+    this.handleTuningAdjustment = this.handleTuningAdjustment.bind(this);
   }
 
   componentDidMount() {
@@ -68,6 +79,16 @@ class Radio extends React.Component {
     });
   }
 
+  handleTuningAdjustment(event) {
+    console.log(event);
+    var newTunings = this.state.tunings;
+    // newTunings[tuning] = value;
+
+    this.setState(function () {
+      return newTunings;
+    });
+  }
+
   render() {
     return (
       <div>
@@ -77,6 +98,7 @@ class Radio extends React.Component {
             loggedIn={this.state.loggedIn}>
           </User>
         }
+        <Tunings tunings={this.state.tunings} handleTuningAdjustment={this.handleTuningAdjustment}></Tunings>
         <Seeds seeds={this.state.seeds}></Seeds>
         <Search token={this.state.token} handleSeedSelect={this.handleSeedSelect}></Search>
       </div>
