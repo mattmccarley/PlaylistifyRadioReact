@@ -24,13 +24,13 @@ class Radio extends React.Component {
         playlists: []
       },
       tunings: {
-        acousticness: undefined,
-        danceability: undefined,
-        energy: undefined,
-        instrumentalness: undefined,
-        loudness: undefined,
-        popularity: undefined,
-        valence: undefined
+        acousticness: 0.5,
+        danceability: 0.5,
+        energy: 0.5,
+        instrumentalness: 0.5,
+        loudness: 0.5,
+        popularity: 0.5,
+        valence: 0.5
       }
     }
 
@@ -80,9 +80,8 @@ class Radio extends React.Component {
   }
 
   handleTuningAdjustment(event) {
-    console.log(event);
     var newTunings = this.state.tunings;
-    // newTunings[tuning] = value;
+    newTunings[event.target.getAttribute('name')] = event.target.value;
 
     this.setState(function () {
       return newTunings;

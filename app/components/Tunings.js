@@ -26,6 +26,7 @@ class Tunings extends React.Component {
                   value={this.props.tunings[key]}
                   onChange={this.props.handleTuningAdjustment}
                 />
+                <span>{this.props.tunings[key]}</span>
               </li>
             )
           })}
