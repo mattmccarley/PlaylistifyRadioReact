@@ -25,18 +25,54 @@ class Radio extends React.Component {
         playlists: []
       },
       tunings: {
-        acousticness: 0.5,
-        danceability: 0.5,
-        energy: 0.5,
-        instrumentalness: 0.5,
-        loudness: 0.5,
-        popularity: 0.5,
-        valence: 0.5
+        acousticness: {
+          min: 0,
+          max: 1,
+          step: .05,
+          value: 0.5
+        },
+        danceability: {
+          min: 0,
+          max: 1,
+          step: .05,
+          value: 0.5
+        },
+        energy: {
+          min: 0,
+          max: 1,
+          step: .05,
+          value: 0.5
+        },
+        instrumentalness: {
+          min: 0,
+          max: 1,
+          step: .05,
+          value: 0.5
+        },
+        loudness: {
+          min: -60,
+          max: 0,
+          step: 1,
+          value: -30
+        },
+        popularity: {
+          min: 0,
+          max: 100,
+          step: 5,
+          value: 50
+        },
+        valence: {
+          min: 0,
+          max: 1,
+          step: .05,
+          value: 0.5
+        }
       },
       player: {
         tracks: [],
         devices: [],
-        playlist: null
+        playlist: null,
+        currentState: null,
       }
     }
 
@@ -50,6 +86,7 @@ class Radio extends React.Component {
     this.getUser();
     this.getDevices();
     this.createPlaylist();
+    this.getPlayState();
   }
 
   getHashParams() {
@@ -146,7 +183,7 @@ class Radio extends React.Component {
 
   handleTuningAdjustment(event) {
     var newTunings = this.state.tunings;
-    newTunings[event.target.getAttribute('name')] = event.target.value;
+    newTunings[event.target.getAttribute('name')].value = event.target.value;
 
     this.setState(function () {
       return newTunings;
@@ -163,15 +200,36 @@ class Radio extends React.Component {
       newState.player.tracks = recommendationsData.tracks;
       this.setState(function () {
         return newState;
-      });
+      }, this.addTracksToPlaylist);
 
     }.bind(this));
   }
 
+  getPlayState() {
+    var token = this.state.token;
+    api.getMyCurrentPlaybackState(token)
+      .then(function (data) {
+        var newState = this.state;
+        newState.player.currentState = data;
+        this.setState(function () {
+          return newState;
+        })
+      }.bind(this));
+  }
+
+  addTracksToPlaylist() {
+    var token = this.state.token;
+    var player = this.state.player;
+    api.replacePlaylistTracks(token, player)
+      .then(function (data) {
+        console.log(data);
+      })
+  }
+
   sendTracksToActivePlayer() {
     var token = this.state.token;
-    var tracks = this.state.player.tracks;
-    api.play(token, tracks);
+    var player = this.state.player;
+    api.play(token, player);
   }
 
   render() {

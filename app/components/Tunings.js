@@ -15,16 +15,16 @@ class Tunings extends React.Component {
               <li key={index}>
                 <label htmlFor={key}>{key}</label>
                 <input
-                  min='0'
-                  max='1'
-                  step='.05'
+                  min={this.props.tunings[key].min}
+                  max={this.props.tunings[key].max}
+                  step={this.props.tunings[key].step}
                   type="range"
                   name={key}
                   id={key}
-                  value={this.props.tunings[key]}
+                  value={this.props.tunings[key].value}
                   onChange={this.props.handleTuningAdjustment}
                 />
-                <span>{this.props.tunings[key]}</span>
+                <span>{this.props.tunings[key].value}</span>
               </li>
             )
           })}

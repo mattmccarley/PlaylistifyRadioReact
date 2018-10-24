@@ -46,14 +46,31 @@ module.exports = {
       });
   },
 
-  play: function (token, tracks) {
+  play: function (token, player) {
     spotifyApi.setAccessToken(token);
-    options = {
+
+    if (!player.currentState.is_playing) {
+
+    }
+    var options = {
       uris: tracks.map(track => {
         return `spotify:track:${track.id}`;
       })
     }
     return spotifyApi.play(options)
+      .then(function (response) {
+        return response;
+      })
+  },
+
+  replacePlaylistTracks: function (token, player) {
+    spotifyApi.setAccessToken(token);
+    var playlistId = player.playlist.id;
+    var trackUris = player.tracks.map(track => {
+        return `spotify:track:${track.id}`;
+      });
+
+    return spotifyApi.replaceTracksInPlaylist(playlistId, trackUris)
       .then(function (response) {
         return response;
       })
@@ -77,6 +94,14 @@ module.exports = {
     }
 
     return spotifyApi.createPlaylist(options)
+      .then(function (response) {
+        return response;
+      });
+  },
+
+  getMyCurrentPlaybackState: function (token) {
+    spotifyApi.setAccessToken(token);
+    return spotifyApi.getMyCurrentPlaybackState()
       .then(function (response) {
         return response;
       });
