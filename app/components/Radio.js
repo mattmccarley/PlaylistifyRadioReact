@@ -6,6 +6,7 @@ var Tunings = require('./Tunings');
 var Search = require('./Search');
 var Seeds = require('./Seeds');
 var Player = require('./Player');
+var debounce = require('lodash.debounce');
 
 
 class Radio extends React.Component {
@@ -78,8 +79,7 @@ class Radio extends React.Component {
 
     this.handleSeedSelect = this.handleSeedSelect.bind(this);
     this.handleTuningAdjustment = this.handleTuningAdjustment.bind(this);
-    this.getTracks = this.getTracks.bind(this);
-    this.sendTracksToActivePlayer = this.sendTracksToActivePlayer.bind(this);
+    this.getTracks = debounce(this.getTracks.bind(this), 2000);
   }
 
   componentDidMount() {
@@ -200,7 +200,7 @@ class Radio extends React.Component {
       newState.player.tracks = recommendationsData.tracks;
       this.setState(function () {
         return newState;
-      }, this.addTracksToPlaylist);
+      }, this.replaceTracksOnPlaylist);
 
     }.bind(this));
   }
@@ -209,6 +209,7 @@ class Radio extends React.Component {
     var token = this.state.token;
     api.getMyCurrentPlaybackState(token)
       .then(function (data) {
+        console.log(data);
         var newState = this.state;
         newState.player.currentState = data;
         this.setState(function () {
@@ -217,19 +218,13 @@ class Radio extends React.Component {
       }.bind(this));
   }
 
-  addTracksToPlaylist() {
+  replaceTracksOnPlaylist() {
     var token = this.state.token;
     var player = this.state.player;
     api.replacePlaylistTracks(token, player)
       .then(function (data) {
         console.log(data);
       })
-  }
-
-  sendTracksToActivePlayer() {
-    var token = this.state.token;
-    var player = this.state.player;
-    api.play(token, player);
   }
 
   render() {

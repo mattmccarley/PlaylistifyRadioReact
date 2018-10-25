@@ -1,6 +1,7 @@
 var React = require('react');
 var api = require('../utils/api');
 var SearchResults = require('./SearchResults');
+var debounce = require('lodash.debounce');
 
 class Search extends React.Component {
   constructor(props) {
@@ -12,7 +13,7 @@ class Search extends React.Component {
     }
 
     this.handleChange = this.handleChange.bind(this);
-    this.searchSpotify = this.searchSpotify.bind(this);
+    this.searchSpotify = debounce(this.searchSpotify.bind(this), 400);
     this.updateSearchResults = this.updateSearchResults.bind(this);
   }
   

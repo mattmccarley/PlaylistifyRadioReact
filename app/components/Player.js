@@ -60,7 +60,6 @@ class Player extends React.Component {
         <h2>Player</h2>
         <Devices devices={this.props.devices}></Devices>
         <Queue tracks={this.props.tracks}></Queue>
-        <button onClick={this.props.sendTracksToActivePlayer}>Play</button>
       </div>
     )
   }
